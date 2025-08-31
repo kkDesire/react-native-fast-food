@@ -1,9 +1,10 @@
-import CardButton from "@/components/CardButton";
-import { images, offers } from "@/constants";
 import cn from 'clsx';
 import React, { Fragment } from "react";
 import { FlatList, Image, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+import CardButton from "@/components/CardButton";
+import { images, offers } from "@/constants";
 
 const ListHeader = () => (
     <View className="flex-between flex-row w-full my-5 px-5">
@@ -14,7 +15,7 @@ const ListHeader = () => (
                 <Image source={images.arrowDown} className="size-3" resizeMode="contain" />
             </TouchableOpacity>
         </View>
-        <CardButton/>
+        <CardButton />
     </View>
 );
 
