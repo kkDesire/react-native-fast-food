@@ -34,7 +34,7 @@ export const createUser = async ({
         return await tables.createRow({
             databaseId: appwriteConfig.databaseId!,
             tableId: appwriteConfig.userCollectionId!,
-            rowId: ID.unique(),
+            rowId: newAccount.$id,
             data: {
                 email, name, accountId: newAccount.$id, avatar: avatarUrl
             }
@@ -59,12 +59,12 @@ export const SignIn = async ({
 export const getCurrentUser = async () => {
     try {
         const currentAccount = await account.get()
+        console.log('Current Account:', currentAccount);
         if(!currentAccount) throw Error;
         const currentUser = await tables.getRow({
             databaseId: appwriteConfig.databaseId!,
             tableId: appwriteConfig.userCollectionId!,
             rowId: currentAccount.$id,
-            // queries: [Query.equal('accountId', currentAccount.$id)]
         })
         if (!currentUser) throw Error;
         return currentUser;

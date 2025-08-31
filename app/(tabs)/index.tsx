@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import CardButton from "@/components/CardButton";
 import { images, offers } from "@/constants";
+import useAuthStore from '@/store/auth.store';
 
 const ListHeader = () => (
     <View className="flex-between flex-row w-full my-5 px-5">
@@ -20,6 +21,8 @@ const ListHeader = () => (
 );
 
 export default function Index() {
+    const { user } = useAuthStore()
+
     return (
         <SafeAreaView className="flex-] bg-white">
             <FlatList
