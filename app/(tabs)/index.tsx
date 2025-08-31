@@ -24,7 +24,7 @@ export default function Index() {
     const { user } = useAuthStore()
 
     return (
-        <SafeAreaView className="flex-] bg-white">
+        <SafeAreaView className="flex-1 bg-white">
             <FlatList
                 data={offers}
                 renderItem={({ item, index }) => {

@@ -59,7 +59,6 @@ export const SignIn = async ({
 export const getCurrentUser = async () => {
     try {
         const currentAccount = await account.get()
-        console.log('Current Account:', currentAccount);
         if(!currentAccount) throw Error;
         const currentUser = await tables.getRow({
             databaseId: appwriteConfig.databaseId!,

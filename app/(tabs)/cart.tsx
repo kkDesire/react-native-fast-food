@@ -1,10 +1,10 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 
-export default function card() {
+export default function cart() {
   return (
     <View>
-      <Text>card</Text>
+      <Text>t</Text>
     </View>
   )
 }
