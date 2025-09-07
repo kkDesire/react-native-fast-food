@@ -1,12 +1,12 @@
 import type { CreateUserParams, SignInParams } from "@/type"
-import { Account, Avatars, Client, ID, TablesDB } from "react-native-appwrite"
+import { Account, Avatars, Client, Databases, ID, Storage, TablesDB } from "react-native-appwrite"
 
 export const appwriteConfig = {
     endpoint: process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT!,
     platform: process.env.EXPO_PUBLIC_PLATFORM!,
     projectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!,
     projectName: process.env.EXPO_PUBLIC_APPWRITE_PROJECT_NAME,
-    databaseId: process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID,
+    databaseId: process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!,
     bucketId: process.env.EXPO_PUBLIC_APPWRITE_BUCKET_ID!,
     userCollectionId: 'user',
     categoriesCollectionId: 'categories',
@@ -22,8 +22,10 @@ client
     .setPlatform(appwriteConfig.platform)
 
 export const account: Account = new Account(client)
+export const databases = new Databases(client);
 export const tables = new TablesDB(client)
 export const avatars = new Avatars(client)
+export const storage = new Storage(client);
 
 export const createUser = async ({
     name,
@@ -37,7 +39,7 @@ export const createUser = async ({
 
         const avatarUrl = avatars.getInitialsURL(name)
         return await tables.createRow({
-            databaseId: appwriteConfig.databaseId!,
+            databaseId: appwriteConfig.databaseId,
             tableId: appwriteConfig.userCollectionId,
             rowId: newAccount.$id,
             data: {
@@ -80,7 +82,7 @@ export const getCurrentUser = async () => {
         const currentAccount = await account.get()
         if(!currentAccount) throw Error;
         const currentUser = await tables.getRow({
-            databaseId: appwriteConfig.databaseId!,
+            databaseId: appwriteConfig.databaseId,
             tableId: appwriteConfig.userCollectionId,
             rowId: currentAccount.$id,
         })
