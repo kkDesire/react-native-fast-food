@@ -3,11 +3,16 @@ import { Account, Avatars, Client, ID, TablesDB } from "react-native-appwrite"
 
 export const appwriteConfig = {
     endpoint: process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT!,
-    platform: 'com.jsm.kkfoodordering',
+    platform: process.env.EXPO_PUBLIC_PLATFORM!,
     projectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!,
     projectName: process.env.EXPO_PUBLIC_APPWRITE_PROJECT_NAME,
     databaseId: process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID,
-    userCollectionId: process.env.EXPO_PUBLIC_APPWRITE_USER_COLLECTION_ID,
+    bucketId: process.env.EXPO_PUBLIC_APPWRITE_BUCKET_ID!,
+    userCollectionId: 'user',
+    categoriesCollectionId: 'categories',
+    menuCollectionId: 'menu',
+    customizationsCollectionId: 'customizations',
+    menuCustomizationsCollectionId: 'menu_customizations',
 }
 
 export const client = new Client()
@@ -33,7 +38,7 @@ export const createUser = async ({
         const avatarUrl = avatars.getInitialsURL(name)
         return await tables.createRow({
             databaseId: appwriteConfig.databaseId!,
-            tableId: appwriteConfig.userCollectionId!,
+            tableId: appwriteConfig.userCollectionId,
             rowId: newAccount.$id,
             data: {
                 email, name, accountId: newAccount.$id, avatar: avatarUrl
@@ -56,13 +61,27 @@ export const SignIn = async ({
     }
 }
 
+export const SignOut = async () => {
+    try {
+        const currentAccount = await account.get()
+        console.log('Current account:', JSON.stringify(currentAccount, null, 2))
+        const result = await account.deleteSession({
+            sessionId: currentAccount.$id
+        })
+
+        console.log('Sign out successful:', result)
+    } catch (error) {
+        throw new Error(error as string)
+    }
+}
+
 export const getCurrentUser = async () => {
     try {
         const currentAccount = await account.get()
         if(!currentAccount) throw Error;
         const currentUser = await tables.getRow({
             databaseId: appwriteConfig.databaseId!,
-            tableId: appwriteConfig.userCollectionId!,
+            tableId: appwriteConfig.userCollectionId,
             rowId: currentAccount.$id,
         })
         if (!currentUser) throw Error;
